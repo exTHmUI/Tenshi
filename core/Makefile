@@ -6424,8 +6424,12 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(OTA_FROM_TARGET_
 $(call declare-1p-container,$(INTERNAL_OTA_PACKAGE_TARGET),)
 $(call declare-container-license-deps,$(INTERNAL_OTA_PACKAGE_TARGET),$(BUILT_TARGET_FILES_PACKAGE) $(OTA_FROM_TARGET_FILES) $(INTERNAL_OTATOOLS_FILES),$(PRODUCT_OUT)/:/)
 
-.PHONY: otapackage
+.PHONY: otapackage reimu
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
+reimu: otapackage
+	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(EXTHM_TARGET_PACKAGE)
+	$(hide) $(MD5SUM) $(EXTHM_TARGET_PACKAGE) > $(EXTHM_TARGET_PACKAGE).md5sum
+	@echo "**Package complete"**: $(EXTHM_TARGET_PACKAGE)"
 
 ifeq ($(BOARD_BUILD_RETROFIT_DYNAMIC_PARTITIONS_OTA_PACKAGE),true)
 name := $(product_name)-ota-retrofit-$(FILE_NAME_TAG)
